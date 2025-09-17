@@ -127,7 +127,7 @@ fun ProductDetailScreen(
                         }
                     }
 
-                    Divider(color = MaterialTheme.colorScheme.outlineVariant)
+                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
 
                     Text(
                         text = "Description",

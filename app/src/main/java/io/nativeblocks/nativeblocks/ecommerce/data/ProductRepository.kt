@@ -55,7 +55,7 @@ object ProductRepository {
             name = "Desk Lamp",
             description = "Modern LED desk lamp with adjustable brightness and color temperature. Perfect for work and study.",
             price = 49.99,
-            imageUrl = "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop",
+            imageUrl = "https://images.unsplash.com/photo-1621447980929-6638614633c8?w=300&h=300&fit=crop",
             category = "Home & Kitchen"
         ),
         Product(
@@ -82,5 +82,21 @@ object ProductRepository {
 
     fun getFeaturedProducts(): List<Product> {
         return sampleProducts.take(4)
+    }
+
+    fun getTrendingProducts(): List<Product> {
+        return sampleProducts.filter { it.category == "Electronics" }
+    }
+
+    fun getBestSellers(): List<Product> {
+        return sampleProducts.sortedByDescending { it.price }.take(4)
+    }
+
+    fun getNewArrivals(): List<Product> {
+        return sampleProducts.filter { it.category in listOf("Sports", "Accessories") }
+    }
+
+    fun getCategories(): List<String> {
+        return sampleProducts.map { it.category }.distinct()
     }
 }
