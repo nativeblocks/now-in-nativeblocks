@@ -8,7 +8,22 @@ sealed class Screen(
     val route: String,
     val arguments: List<NamedNavArgument> = emptyList()
 ) {
-    data object Home : Screen("home")
+    data object Home : Screen(
+        route = "home?campaignId={campaignId}",
+        arguments = listOf(
+            navArgument("campaignId") {
+                type = NavType.StringType
+                nullable = true
+                defaultValue = null
+            }
+        )
+    ) {
+        fun createRoute(campaignId: String? = null) = if (campaignId != null) {
+            "home?campaignId=$campaignId"
+        } else {
+            "home"
+        }
+    }
 
     data object ProductList : Screen("product_list")
 

@@ -17,8 +17,13 @@ fun NavGraph(
         navController = navController,
         startDestination = Screen.Home.route
     ) {
-        composable(Screen.Home.route) {
+        composable(
+            route = Screen.Home.route,
+            arguments = Screen.Home.arguments
+        ) { backStackEntry ->
+            val campaignId = backStackEntry.arguments?.getString("campaignId")
             HomeScreen(
+                campaignId = campaignId,
                 onProductClick = { productId ->
                     navController.navigate(Screen.ProductDetail.createRoute(productId))
                 },
