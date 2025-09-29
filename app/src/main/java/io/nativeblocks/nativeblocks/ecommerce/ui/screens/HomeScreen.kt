@@ -29,15 +29,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import io.nativeblocks.core.api.NativeblocksManager
+import io.nativeblocks.nativeblocks.ecommerce.data.NativeblocksRoutes
 import io.nativeblocks.nativeblocks.ecommerce.data.ProductRepository
-import io.nativeblocks.nativeblocks.ecommerce.data.CampaignRepository
 import io.nativeblocks.nativeblocks.ecommerce.ui.components.AppHeader
 import io.nativeblocks.nativeblocks.ecommerce.ui.components.HotDealsBanner
-import io.nativeblocks.nativeblocks.ecommerce.ui.components.OfferDialog
+import io.nativeblocks.nativeblocks.ecommerce.ui.components.NativeblocksOfferDialog
 import io.nativeblocks.nativeblocks.ecommerce.ui.components.ProductCard
 import io.nativeblocks.nativeblocks.ecommerce.ui.components.PromoBanner
 import io.nativeblocks.nativeblocks.ecommerce.ui.components.SectionBanner
-import kotlinx.coroutines.delay
 
 @Composable
 fun HomeScreen(
@@ -46,15 +46,19 @@ fun HomeScreen(
     onSeeAllClick: () -> Unit
 ) {
     var showOfferDialog by remember { mutableStateOf(false) }
-    val campaign = CampaignRepository.getCampaign(campaignId) ?: CampaignRepository.getDefaultCampaign()
 
     LaunchedEffect(campaignId) {
+        val campaignParams = NativeblocksRoutes.getCampaignParameters(campaignId)
+        NativeblocksManager.getInstance().setGlobalParameters(*campaignParams)
+
+        val userParams = NativeblocksRoutes.getUserSegmentParameters(
+            userType = if (campaignId == null) NativeblocksRoutes.USER_TYPE_ORGANIC else NativeblocksRoutes.USER_TYPE_DEEPLINK,
+            appOpenCount = 1,
+            previousPurchases = 0
+        )
+        NativeblocksManager.getInstance().setGlobalParameters(*userParams, *campaignParams)
+
         if (campaignId != null) {
-            // Show dialog immediately for deeplink campaigns
-            showOfferDialog = true
-        } else {
-            // Show default dialog after 3 seconds
-            delay(3000)
             showOfferDialog = true
         }
     }
@@ -235,15 +239,11 @@ fun HomeScreen(
     }
 
     if (showOfferDialog) {
-        OfferDialog(
-            campaign = campaign,
+        NativeblocksOfferDialog(
+            campaignId = campaignId,
             onDismiss = {
                 showOfferDialog = false
             },
-            onAccept = {
-                showOfferDialog = false
-                onSeeAllClick() // Navigate to product list when user accepts
-            }
         )
     }
 }

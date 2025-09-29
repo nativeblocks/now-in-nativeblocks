@@ -12,6 +12,11 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
+import io.nativeblocks.core.api.NativeblocksEdition
+import io.nativeblocks.core.api.NativeblocksManager
+import io.nativeblocks.core.api.provider.logger.INativeLogger
+import io.nativeblocks.core.api.provider.logger.LoggerEventLevel
+import io.nativeblocks.foundation.FoundationProvider
 import io.nativeblocks.nativeblocks.ecommerce.navigation.NavGraph
 import io.nativeblocks.nativeblocks.ecommerce.navigation.Screen
 import io.nativeblocks.nativeblocks.ecommerce.ui.theme.NativeblocksecommerceTheme
@@ -21,10 +26,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
+        initializeNativeblocks()
+
         setContent {
             val navController = rememberNavController()
 
-            // Handle deeplink
             LaunchedEffect(intent) {
                 handleDeeplink(intent, navController)
             }
@@ -43,6 +49,25 @@ class MainActivity : ComponentActivity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        NativeblocksManager.getInstance().destroy()
+    }
+
+    private fun initializeNativeblocks() {
+        NativeblocksManager.initialize(
+            applicationContext = this,
+            edition = NativeblocksEdition.Cloud(
+                endpoint = "https://api.nativeblocks.io/gateway/init",
+                apiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3ODI3MzI5OTUsImlkIjoiMDE5N2JiNzktOTAzMC03Y2EzLWIyMjktNWU1NjIxNDQ0NWE3Iiwib3JnIjoiMDE5NmE5YWItM2NjMi03OGY3LTgxMzQtYmI5ZDU3MmUwNDIzIn0.Hiqf_9Zo4pBGrq8H4ndAd1Wj9D-3dw4PLZHGEj67WTI", // Replace with your actual API key
+                developmentMode = true // Set to false for production
+            )
+        )
+
+        FoundationProvider.provide()
+        NativeblocksManager.getInstance().provideEventLogger("LOGGER", Logger())
     }
 
     private fun handleDeeplink(intent: Intent, navController: androidx.navigation.NavController) {
@@ -68,5 +93,30 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+}
+
+class Logger : INativeLogger {
+    override fun log(
+        level: LoggerEventLevel,
+        event: String,
+        message: String,
+        parameters: Map<String, String>
+    ) {
+        val jsonLog = buildString {
+            appendLine("{")
+            appendLine("  \"level\": \"${level.name}\",")
+            appendLine("  \"event\": \"$event\",")
+            appendLine("  \"message\": \"$message\",")
+            appendLine("  \"parameters\": {")
+            parameters.entries.forEachIndexed { index, entry ->
+                append("    \"${entry.key}\": \"${entry.value}\"")
+                if (index != parameters.entries.size - 1) append(",")
+                appendLine()
+            }
+            appendLine("  }")
+            append("}")
+        }
+        android.util.Log.d("NativeblocksLogger", jsonLog)
     }
 }
