@@ -62,7 +62,7 @@ class MainActivity : ComponentActivity() {
             edition = NativeblocksEdition.Cloud(
                 endpoint = "https://api.nativeblocks.io/gateway/init",
                 apiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3ODI3MzI5OTUsImlkIjoiMDE5N2JiNzktOTAzMC03Y2EzLWIyMjktNWU1NjIxNDQ0NWE3Iiwib3JnIjoiMDE5NmE5YWItM2NjMi03OGY3LTgxMzQtYmI5ZDU3MmUwNDIzIn0.Hiqf_9Zo4pBGrq8H4ndAd1Wj9D-3dw4PLZHGEj67WTI", // Replace with your actual API key
-                developmentMode = true // Set to false for production
+                developmentMode = false
             )
         )
 
