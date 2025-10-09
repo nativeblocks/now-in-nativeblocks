@@ -1,5 +1,6 @@
 package io.nativeblocks.nativeblocks.ecommerce.ui.components
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
@@ -35,10 +37,10 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun AppHeader(
     userName: String = "John",
-    modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
     Box(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
             .background(
                 brush = Brush.verticalGradient(
@@ -58,7 +60,9 @@ fun AppHeader(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 IconButton(
-                    onClick = { /* TODO: Menu action */ }
+                    onClick = {
+                        Toast.makeText(context, "Menu clicked", Toast.LENGTH_SHORT).show()
+                    }
                 ) {
                     Icon(
                         imageVector = Icons.Default.Menu,
@@ -70,7 +74,9 @@ fun AppHeader(
 
                 Row {
                     IconButton(
-                        onClick = { /* TODO: Notifications */ }
+                        onClick = {
+                            Toast.makeText(context, "Notifications clicked", Toast.LENGTH_SHORT).show()
+                        }
                     ) {
                         Icon(
                             imageVector = Icons.Default.Notifications,
@@ -80,7 +86,9 @@ fun AppHeader(
                         )
                     }
                     IconButton(
-                        onClick = { /* TODO: Shopping bag */ }
+                        onClick = {
+                            Toast.makeText(context, "Shopping Bag clicked", Toast.LENGTH_SHORT).show()
+                        }
                     ) {
                         Icon(
                             imageVector = Icons.Default.ShoppingCart,

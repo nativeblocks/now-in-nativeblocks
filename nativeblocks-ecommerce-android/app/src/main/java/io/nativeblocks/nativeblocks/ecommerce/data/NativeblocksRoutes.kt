@@ -6,8 +6,12 @@ object NativeblocksRoutes {
     const val CAMPAIGN_ID_PARAM = "campaignId"
     const val USER_TYPE_PARAM = "userType"
     const val SOURCE_PARAM = "source"
-    const val PLATFORM_PARAM = "platform"
     const val SESSION_TIMESTAMP_PARAM = "sessionTimestamp"
+    const val USER_ID_PARAM = "userId"
+    const val LOCATION_PARAM = "location"
+    const val PREVIOUS_PURCHASES_PARAM = "previousPurchases"
+    const val APP_OPEN_COUNT_PARAM = "appOpenCount"
+    const val SESSION_TYPE_PARAM = "sessionType"
 
     // User type values
     const val USER_TYPE_ORGANIC = "organic"
@@ -17,36 +21,39 @@ object NativeblocksRoutes {
     const val SOURCE_ORGANIC = "organic"
     const val SOURCE_DEEPLINK = "deeplink"
 
-    // Platform value
-    const val PLATFORM_ANDROID = "android"
+    // Session type values
+    const val SESSION_TYPE_RETURNING = "returning"
+    const val SESSION_TYPE_NEW = "new"
 
-    fun getCampaignParameters(campaignId: String?): Array<Pair<String, String>> {
-        val params = mutableListOf<Pair<String, String>>()
-        campaignId?.let {
-            params.add(CAMPAIGN_ID_PARAM to it)
-        }
-        params.add(SOURCE_PARAM to if (campaignId != null) SOURCE_DEEPLINK else SOURCE_ORGANIC)
-        params.add(PLATFORM_PARAM to PLATFORM_ANDROID)
-        params.add(SESSION_TIMESTAMP_PARAM to System.currentTimeMillis().toString())
-
-        return params.toTypedArray()
-    }
-
-    fun getUserSegmentParameters(
-        userType: String = USER_TYPE_ORGANIC,
+    fun getParameters(
+        campaignId: String? = null,
+        userType: String? = null,
         userId: String? = null,
         location: String? = null,
-        previousPurchases: Int = 0,
-        appOpenCount: Int = 1
+        previousPurchases: Int? = null,
+        appOpenCount: Int? = null
     ): Array<Pair<String, String>> {
         val params = mutableListOf<Pair<String, String>>()
 
-        params.add(USER_TYPE_PARAM to userType)
-        userId?.let { params.add("userId" to it) }
-        location?.let { params.add("location" to it) }
-        params.add("previousPurchases" to previousPurchases.toString())
-        params.add("appOpenCount" to appOpenCount.toString())
-        params.add("sessionType" to if (previousPurchases > 0) "returning" else "new")
+        // Campaign-related parameters
+        if (campaignId != null) {
+            params.add(CAMPAIGN_ID_PARAM to campaignId)
+            params.add(SOURCE_PARAM to SOURCE_DEEPLINK)
+        } else {
+            params.add(SOURCE_PARAM to SOURCE_ORGANIC)
+        }
+        params.add(SESSION_TIMESTAMP_PARAM to System.currentTimeMillis().toString())
+
+        // User-related parameters (add only if userType provided or they are not null)
+        userType?.let { params.add(USER_TYPE_PARAM to it) }
+        userId?.let { params.add(USER_ID_PARAM to it) }
+        location?.let { params.add(LOCATION_PARAM to it) }
+        previousPurchases?.let { params.add(PREVIOUS_PURCHASES_PARAM to it.toString()) }
+        appOpenCount?.let { params.add(APP_OPEN_COUNT_PARAM to it.toString()) }
+
+        if (previousPurchases != null) {
+            params.add(SESSION_TYPE_PARAM to if (previousPurchases > 0) SESSION_TYPE_RETURNING else SESSION_TYPE_NEW)
+        }
 
         return params.toTypedArray()
     }

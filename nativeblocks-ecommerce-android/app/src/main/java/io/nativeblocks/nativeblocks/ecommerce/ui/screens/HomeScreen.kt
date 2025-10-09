@@ -34,7 +34,7 @@ import io.nativeblocks.nativeblocks.ecommerce.data.NativeblocksRoutes
 import io.nativeblocks.nativeblocks.ecommerce.data.ProductRepository
 import io.nativeblocks.nativeblocks.ecommerce.ui.components.AppHeader
 import io.nativeblocks.nativeblocks.ecommerce.ui.components.HotDealsBanner
-import io.nativeblocks.nativeblocks.ecommerce.ui.components.NativeblocksOfferDialog
+import io.nativeblocks.nativeblocks.ecommerce.ui.components.NativeblocksPromotionDialog
 import io.nativeblocks.nativeblocks.ecommerce.ui.components.ProductCard
 import io.nativeblocks.nativeblocks.ecommerce.ui.components.PromoBanner
 import io.nativeblocks.nativeblocks.ecommerce.ui.components.SectionBanner
@@ -48,15 +48,13 @@ fun HomeScreen(
     var showOfferDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(campaignId) {
-        val campaignParams = NativeblocksRoutes.getCampaignParameters(campaignId)
-        NativeblocksManager.getInstance().setGlobalParameters(*campaignParams)
-
-        val userParams = NativeblocksRoutes.getUserSegmentParameters(
+        val params = NativeblocksRoutes.getParameters(
+            campaignId = campaignId,
             userType = if (campaignId == null) NativeblocksRoutes.USER_TYPE_ORGANIC else NativeblocksRoutes.USER_TYPE_DEEPLINK,
             appOpenCount = 1,
             previousPurchases = 0
         )
-        NativeblocksManager.getInstance().setGlobalParameters(*userParams, *campaignParams)
+        NativeblocksManager.getInstance().setGlobalParameters(*params)
 
         if (campaignId != null) {
             showOfferDialog = true
@@ -239,7 +237,7 @@ fun HomeScreen(
     }
 
     if (showOfferDialog) {
-        NativeblocksOfferDialog(
+        NativeblocksPromotionDialog(
             campaignId = campaignId,
             onDismiss = {
                 showOfferDialog = false

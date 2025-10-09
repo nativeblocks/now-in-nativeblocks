@@ -35,7 +35,7 @@ import io.nativeblocks.core.api.NativeblocksManager
  * It simply waits for the route, then shows the dialog directly.
  */
 @Composable
-fun NativeblocksOfferDialog(
+fun NativeblocksPromotionDialog(
     campaignId: String?,
     onDismiss: () -> Unit,
 ) {
