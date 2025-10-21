@@ -1,6 +1,7 @@
 package io.nativeblocks.nativeblocks.ecommerce.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,6 +24,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,8 +40,10 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun HotDealsBanner(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
+    var showOfferDialog by remember { mutableStateOf(false) }
+
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -54,7 +61,8 @@ fun HotDealsBanner(
         Row(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(20.dp),
+                .padding(20.dp)
+                .clickable { showOfferDialog = true },
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -72,7 +80,7 @@ fun HotDealsBanner(
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = "🔥 HOT DEALS",
+                        text = "🔥 NEW HOT DEALS",
                         style = MaterialTheme.typography.headlineSmall,
                         fontWeight = FontWeight.Bold,
                         color = Color.White
@@ -80,7 +88,7 @@ fun HotDealsBanner(
                 }
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "Up to 50% OFF on selected items",
+                    text = "Up to 25% OFF on selected items",
                     style = MaterialTheme.typography.bodyMedium,
                     color = Color.White.copy(alpha = 0.9f),
                     fontWeight = FontWeight.Medium
@@ -97,7 +105,7 @@ fun HotDealsBanner(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "50%\nOFF",
+                    text = "25%\nOFF",
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
                     color = Color.White,
@@ -105,6 +113,13 @@ fun HotDealsBanner(
                     lineHeight = MaterialTheme.typography.labelLarge.lineHeight
                 )
             }
+        }
+
+        if (showOfferDialog) {
+            NativeblocksPromotionDialog(
+                campaignId = null,
+                onDismiss = { showOfferDialog = false }
+            )
         }
     }
 }

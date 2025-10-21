@@ -51,6 +51,7 @@ dependencies {
     implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.nativeblocks.android)
     implementation(libs.nativeblocks.foundation.android)
+    implementation(libs.nativeblocks.wandkit.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
