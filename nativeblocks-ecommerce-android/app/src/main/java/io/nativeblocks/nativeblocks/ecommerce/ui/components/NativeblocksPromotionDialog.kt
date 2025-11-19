@@ -40,7 +40,7 @@ fun NativeblocksPromotionDialog(
     onDismiss: () -> Unit,
 ) {
     val configuration = LocalConfiguration.current
-    val dialogHeight = (configuration.screenHeightDp * 0.5f).dp
+    val dialogHeight = (configuration.screenHeightDp * 0.52f).dp
 
     var isLoading by remember { mutableStateOf(true) }
     var nativeblocksRoute by remember { mutableStateOf<String?>(null) }
