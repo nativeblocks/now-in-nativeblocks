@@ -49,15 +49,11 @@ fun NativeblocksPromotionDialog(
     LaunchedEffect(campaignId) {
         isLoading = true
         hasFailed = false
-        NativeblocksManager.getInstance().getLanding("welcome")
-            .onSuccess { route ->
-                nativeblocksRoute = route
-                isLoading = false
-            }
-            .onFailure {
-                isLoading = false
-                hasFailed = true
-            }
+        nativeblocksRoute = NativeblocksManager.getInstance().getExperiment("welcome", "fallback")
+        isLoading = false
+        if (nativeblocksRoute == "fallback") {
+            hasFailed = true
+        }
     }
 
     if (hasFailed) {
