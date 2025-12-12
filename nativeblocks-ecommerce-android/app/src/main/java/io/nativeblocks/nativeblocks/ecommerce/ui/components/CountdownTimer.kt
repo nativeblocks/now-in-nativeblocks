@@ -31,18 +31,7 @@ import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-enum class CountdownStyle {
-    PRIMARY,
-    SECONDARY,
-    ACCENT,
-    DANGER
-}
 
-enum class CountdownSize {
-    S,
-    M,
-    L
-}
 
 @Composable
 fun CountdownTimer(
@@ -171,6 +160,19 @@ fun CountdownTimer(
     }
 }
 
+enum class CountdownStyle {
+    PRIMARY,
+    SECONDARY,
+    ACCENT,
+    DANGER
+}
+
+enum class CountdownSize {
+    S,
+    M,
+    L
+}
+
 @Composable
 private fun TimeBox(
     value: Long,
@@ -212,13 +214,12 @@ private data class TimeDisplayConfig(
     val boxSize: Dp
 )
 
-
 @Preview
 @Composable
 private fun Preview1() {
     CountdownTimer(
         modifier = Modifier,
-        targetDate = "2025-12-12 15:45:00",
+        targetDate = "2025-12-12 20:45:00",
         style = CountdownStyle.PRIMARY,
         size = CountdownSize.L
     )
@@ -229,7 +230,7 @@ private fun Preview1() {
 private fun Preview2() {
     CountdownTimer(
         modifier = Modifier,
-        targetDate = "2025-12-12 15:45:00",
+        targetDate = "2025-12-12 20:45:00",
         style = CountdownStyle.SECONDARY,
         size = CountdownSize.M
     )
@@ -240,7 +241,7 @@ private fun Preview2() {
 private fun Preview3() {
     CountdownTimer(
         modifier = Modifier,
-        targetDate = "2025-12-12 15:45:00",
+        targetDate = "2025-12-12 20:45:00",
         style = CountdownStyle.DANGER,
         size = CountdownSize.S
     )
