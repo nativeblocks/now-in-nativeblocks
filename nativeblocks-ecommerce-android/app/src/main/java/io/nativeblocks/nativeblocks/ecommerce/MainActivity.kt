@@ -12,11 +12,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
-import io.nativeblocks.core.api.NativeblocksEdition
 import io.nativeblocks.core.api.NativeblocksManager
-import io.nativeblocks.core.api.provider.logger.INativeLogger
-import io.nativeblocks.core.api.provider.logger.LoggerEventLevel
-import io.nativeblocks.foundation.FoundationProvider
+import io.nativeblocks.nativeblocks.ecommerce.nativeblocks.initializeNativeblocks
 import io.nativeblocks.nativeblocks.ecommerce.navigation.NavGraph
 import io.nativeblocks.nativeblocks.ecommerce.navigation.Screen
 import io.nativeblocks.nativeblocks.ecommerce.ui.theme.NativeblocksecommerceTheme
@@ -56,20 +53,6 @@ class MainActivity : ComponentActivity() {
         NativeblocksManager.getInstance().destroy()
     }
 
-    private fun initializeNativeblocks() {
-        NativeblocksManager.initialize(
-            applicationContext = this,
-            edition = NativeblocksEdition.Cloud(
-                endpoint = "https://api.nativeblocks.io/gateway/init",
-                apiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3OTUwNjk4ODAsImlkIjoiMDE5YTlhY2YtN2QwMi03ODA4LWIzYjAtMDZlODQ4ODM5NzZiIiwib3JnIjoiMDE5ODhkZWQtNjdhMC03ZGQyLWJkOWEtZDUwM2Q5NDQ3ZWI5In0.txZ4S9Khpvh9RWLIL2xZdi-Qs4W5ROJ7bW9c4F-UOoc", // Replace with your actual API key
-                developmentMode = false
-            )
-        )
-
-        FoundationProvider.provide()
-        NativeblocksManager.getInstance().provideEventLogger("LOGGER", Logger())
-    }
-
     private fun handleDeeplink(intent: Intent, navController: androidx.navigation.NavController) {
         val data: Uri? = intent.data
         if (data != null) {
@@ -96,27 +79,3 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-class Logger : INativeLogger {
-    override fun log(
-        level: LoggerEventLevel,
-        event: String,
-        message: String,
-        parameters: Map<String, String>
-    ) {
-        val jsonLog = buildString {
-            appendLine("{")
-            appendLine("  \"level\": \"${level.name}\",")
-            appendLine("  \"event\": \"$event\",")
-            appendLine("  \"message\": \"$message\",")
-            appendLine("  \"parameters\": {")
-            parameters.entries.forEachIndexed { index, entry ->
-                append("    \"${entry.key}\": \"${entry.value}\"")
-                if (index != parameters.entries.size - 1) append(",")
-                appendLine()
-            }
-            appendLine("  }")
-            append("}")
-        }
-        android.util.Log.d("NativeblocksLogger", jsonLog)
-    }
-}

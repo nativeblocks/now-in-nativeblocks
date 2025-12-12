@@ -9,9 +9,9 @@ espressoCore = "3.7.0"
 lifecycleRuntimeKtx = "2.9.3"
 activityCompose = "1.11.0"
 composeBom = "2024.09.00"
-nativeblocksAndroid = "1.7.0"
+nativeblocksAndroid = "1.7.1"
 nativeblocksFoundationAndroid = "1.2.1"
-nativeblocksWandkitAndroid = "1.0.7"
+nativeblocksWandkitAndroid = "1.1.0"
 navigationCompose = "2.9.4"
 
 [libraries]
